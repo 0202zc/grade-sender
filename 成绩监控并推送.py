@@ -84,6 +84,13 @@ def getOpeningSystem():
     return platform.system()
 
 
+# 判断操作系统类型
+
+
+def getOpeningSystem():
+    return platform.system()
+
+
 # 判断是否联网
 
 
@@ -142,8 +149,10 @@ def code_recognition():
         #   调用百度云识别验证码
         result = client.basicAccurate(get_file_content('' + DstDir + '\\ScoreHelper\\CheckCode2.jpg'))
         word = result.get('words_result')
-        res = re.findall('[a-zA-Z0-9]+', word[0].get('words'))[0]
-        if len(res) > 4:  # 教务系统所有的验证码都是四位的，若大于四位，则挑选前四位
+        res = ""
+        if len(word):
+            res = re.findall('[a-zA-Z0-9]+', word[0].get('words'))[0]
+        elif len(res) > 4:  # 教务系统所有的验证码都是四位的，若大于四位，则挑选前四位
             res = res[0:4]
         return res
     except Exception as e:
@@ -618,7 +627,7 @@ if __name__ == '__main__':
 
             loginCount = 0
             while not login():
-                if loginCount > 1:
+                if loginCount > 3:
                     #   超过三次未登录自动更换网址
                     url_head = "202.199.155." + str(random.randint(33, 37))
                     final_url = 'http://' + url_head + \
