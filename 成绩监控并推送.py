@@ -451,12 +451,13 @@ def htmlText(scorenum):
                                 </tr>   
 
 
-                    """ + addtrs(scorenum)
+                    """ + addtrs(scorenum) + """
+                        </table>
+                    """
 
     #   最后一次推送时计算GPA并与成绩表格一起推送
     if scorenum == required_course_num:
         html += """
-                        </table>
                         <br/>
                         <div class='gpa_text' style='font-size: 25px;font-style: italic;'>-->平均绩点：%s <--</div>
                     """ % (getGPA()) + """
