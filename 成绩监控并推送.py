@@ -1,8 +1,8 @@
 '''
-大连大学成绩查询助手V1.7.190215
-Code Changed By ZC Liang
+大连大学成绩查询助手V1.7.190216
+Code By ZC Liang
 2018.6.6
-Completed on 2019.2.15
+Completed on 2019.2.16
 '''
 
 import getpass
@@ -31,6 +31,8 @@ from aip import AipOcr
 from bs4 import BeautifulSoup
 from PIL import Image
 from prettytable import PrettyTable
+from requests import ReadTimeout
+from requests import ConnectionError
 
 my_sender = '发件人邮箱账号'  # 发件人邮箱账号
 my_pass = '发件人邮箱密码(当时申请smtp给的口令)'  # 发件人邮箱密码(当时申请smtp给的口令)
@@ -86,13 +88,22 @@ def getOpeningSystem():
 
 
 def isConnected():
-    userOs = getOpeningSystem()
-    if userOs == "Windows":
-        subprocess.check_call(
-            ["ping", "-n", "2", url_head], stdout=subprocess.PIPE)
-    else:
-        subprocess.check_call(
-            ["ping", "-c", "2", url_head], stdout=subprocess.PIPE)
+    # userOs = getOpeningSystem()
+    # if userOs == "Windows":
+    #     subprocess.check_call(
+    #         ["ping", "-n", "2", url_head], stdout=subprocess.PIPE)
+    # else:
+    #     subprocess.check_call(
+    #         ["ping", "-c", "2", url_head], stdout=subprocess.PIPE)
+    try:
+        response = requests.get('http://' + url_head, timeout=1)
+        if response.status_code == 200:
+            return True
+        else:
+            print('网络检测错误status_code: ' + response.status_code, 'http://' + url_head)
+            return False
+    except (ConnectionError, ReadTimeout):
+        print('无网络连接。')
 
 
 # 获取重定向编码
@@ -127,13 +138,16 @@ def image_util(img):
 
 #   验证码识别
 def code_recognition():
-    #   调用百度云识别验证码
-    result = client.basicAccurate(get_file_content('' + DstDir + '\\ScoreHelper\\CheckCode2.jpg'))
-    word = result.get('words_result')
-    res = re.findall('[a-zA-Z0-9]+', word[0].get('words'))[0]
-    if len(res) > 4:  # 教务系统所有的验证码都是四位的，若大于四位，则挑选前四位
-        res = res[0:4]
-    return res
+    try:
+        #   调用百度云识别验证码
+        result = client.basicAccurate(get_file_content('' + DstDir + '\\ScoreHelper\\CheckCode2.jpg'))
+        word = result.get('words_result')
+        res = re.findall('[a-zA-Z0-9]+', word[0].get('words'))[0]
+        if len(res) > 4:  # 教务系统所有的验证码都是四位的，若大于四位，则挑选前四位
+            res = res[0:4]
+        return res
+    except Exception as e:
+        print(e)
 
 
 #   登陆
@@ -380,8 +394,7 @@ def sendScore(table):
             msg['To'] = formataddr([email_send_to, email_send_to])
 
             if count == required_course_num:
-                msg['Subject'] = "第" + \
-                                 str(count) + "次成绩推送加平均绩点"  # 邮件的主题，也可以说是标题
+                msg['Subject'] = "第" + str(count) + "次成绩推送加平均绩点"
             else:
                 msg['Subject'] = "第" + str(count) + "次成绩推送"  # 邮件的主题，也可以说是标题
 
@@ -442,7 +455,7 @@ def htmlText(scorenum):
 
     #   最后一次推送时计算GPA并与成绩表格一起推送
     if scorenum == required_course_num:
-        html += addtrs(scorenum) + """
+        html += """
                         </table>
                         <br/>
                         <div class='gpa_text' style='font-size: 25px;font-style: italic;'>-->平均绩点：%s <--</div>
@@ -459,9 +472,7 @@ def addtrs(scorenum):
     i = 1
     array = []
     while i <= scorenum:
-        if (scorenp[i][5].isalpha() and scorenp[i][5] == "A") or (scorenp[i][5].isdigit() and int(scorenp[i][5]) >= 90):
-            #   等级A和90以上的成绩标记为绿色
-            trs = '''
+        trs = '''
                                     <tr>   
 
                                             <td>%s </td>
@@ -474,48 +485,25 @@ def addtrs(scorenum):
 
                                             <td>%s </td>
 
-                                            <td style="color:springgreen;text-align: center;">%s </td>
+                        ''' % (scorenp[i][0], scorenp[i][1], scorenp[i][2], scorenp[i][3], scorenp[i][4])
+        if (scorenp[i][5].isalpha() and scorenp[i][5] == "A") or (scorenp[i][5].isdigit() and int(scorenp[i][5]) >= 90):
+            #   等级A和90以上的成绩标记为绿色
+            trs += '<td style="color:springgreen;">'
 
-                                    </tr>
-                        ''' % (scorenp[i][0], scorenp[i][1], scorenp[i][2], scorenp[i][3], scorenp[i][4], scorenp[i][5])
         elif (scorenp[i][5].isalpha() and scorenp[i][5] == "F") or (
                 scorenp[i][5].isdigit() and int(scorenp[i][5]) < 60):
             #   不及格的成绩标记为红色
-            trs = '''
-                                    <tr>   
+            trs += '<td style="color:red;">'
 
-                                            <td>%s </td>
-
-                                            <td>%s </td>
-
-                                            <td>%s </td>
-
-                                            <td>%s </td>
-
-                                            <td>%s </td>
-
-                                            <td style="color:red;">%s </td>
-
-                                    </tr>
-                        ''' % (scorenp[i][0], scorenp[i][1], scorenp[i][2], scorenp[i][3], scorenp[i][4], scorenp[i][5])
         else:
-            trs = '''
-                        <tr>   
+            #   普通成绩不标记
+            trs += '<td>'
 
-                                <td>%s </td>
+        trs += '''
+                            %s </td>
 
-                                <td>%s </td>
-
-                                <td>%s </td>
-
-                                <td>%s </td>
-
-                                <td>%s </td>
-
-                                <td>%s </td>
-
-                        </tr>
-            ''' % (scorenp[i][0], scorenp[i][1], scorenp[i][2], scorenp[i][3], scorenp[i][4], scorenp[i][5])
+                    </tr>
+        ''' % (scorenp[i][5])
         array.append(trs)
         i += 1
     s = ""
@@ -545,16 +533,10 @@ def getGPA():
             continue
         else:
             #   有些成绩是等级，需要转换为数字
-            if scorenp[i][5] == "F":
+            if scorenp[i][5].isalpha() and scorenp[i][5] != "F":
+                sc.append(745 - 10 * ord(scorenp[i][5]))  # 计算式子：x - (x - A) + 10 * (D - x) 即 745 - 10 * x
+            elif scorenp[i][5] == "F":
                 sc.append(0)
-            elif scorenp[i][5] == "A":
-                sc.append(95)
-            elif scorenp[i][5] == "B":
-                sc.append(85)
-            elif scorenp[i][5] == "C":
-                sc.append(75)
-            elif scorenp[i][5] == "D":
-                sc.append(65)
             else:
                 sc.append(int(scorenp[i][5]))
 
@@ -620,43 +602,43 @@ if __name__ == '__main__':
         searchCount = 1
         print('欢迎使用大连大学成绩查询助手！')
         print('正在检查网络...')
-        isConnected()
-        with open(r'' + DstDir + '\\ScoreHelper\\uinfo.bin', 'rb') as file:
-            udick = pickle.load(file)
-            sname = udick['sname']
-            sid = udick['sid']
-            spwd = udick['spwd']
-            email_send_to = udick['email_send_to']
+        if isConnected():
+            with open(r'' + DstDir + '\\ScoreHelper\\uinfo.bin', 'rb') as file:
+                udick = pickle.load(file)
+                sname = udick['sname']
+                sid = udick['sid']
+                spwd = udick['spwd']
+                email_send_to = udick['email_send_to']
 
-        #   构造登录地址
-        final_url = 'http://' + url_head + \
-                    check_for_redirects('http://' + url_head + '/default2.aspx')
-        final_url_head = final_url[0:48]
+            #   构造登录地址
+            final_url = 'http://' + url_head + \
+                        check_for_redirects('http://' + url_head + '/default2.aspx')
+            final_url_head = final_url[0:48]
 
-        loginCount = 0
-        while not login():
-            if loginCount > 3:
-                #   超过三次未登录自动更换网址
-                url_head = "202.199.155." + str(random.randint(33, 37))
-                final_url = 'http://' + url_head + \
-                            check_for_redirects('http://' + url_head + '/default2.aspx')
-                final_url_head = final_url[0:48]
-                loginCount = 0
-            loginCount += 1
-            print("正在等待重试...")
-            time.sleep(3)
-            continue
+            loginCount = 0
+            while not login():
+                if loginCount > 1:
+                    #   超过三次未登录自动更换网址
+                    url_head = "202.199.155." + str(random.randint(33, 37))
+                    final_url = 'http://' + url_head + \
+                                check_for_redirects('http://' + url_head + '/default2.aspx')
+                    final_url_head = final_url[0:48]
+                    loginCount = 0
+                loginCount += 1
+                print("正在等待重试...")
+                time.sleep(3)
+                continue
 
-        get_RequiredCourse_num()
-        getScore()
-        counter = 0
-        while scorenum <= required_course_num:
-            counter += 1
-            if scorenum == required_course_num:
-                print("本学期成绩查询完成！")
-                break
-            if counter > 0:
-                getScore()
+            get_RequiredCourse_num()
+            getScore()
+            counter = 0
+            while scorenum <= required_course_num:
+                counter += 1
+                if scorenum == required_course_num:
+                    print("本学期成绩查询完成！")
+                    break
+                if counter > 0:
+                    getScore()
     except FileNotFoundError:
         # if os.path.exists(r'' + DstDir + '\\ScoreHelper'):
         #     os.remove(r'' + DstDir + '\\ScoreHelper')
