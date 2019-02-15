@@ -95,13 +95,6 @@ def getOpeningSystem():
 
 
 def isConnected():
-    # userOs = getOpeningSystem()
-    # if userOs == "Windows":
-    #     subprocess.check_call(
-    #         ["ping", "-n", "2", url_head], stdout=subprocess.PIPE)
-    # else:
-    #     subprocess.check_call(
-    #         ["ping", "-c", "2", url_head], stdout=subprocess.PIPE)
     try:
         response = requests.get('http://' + url_head, timeout=1)
         if response.status_code == 200:
