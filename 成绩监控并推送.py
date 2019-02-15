@@ -417,30 +417,32 @@ def prettyScore():
 def htmlText(scorenum):
     global required_course_num
 
-    #   最后一次推送时计算GPA并与成绩表格一起推送
-    if scorenum == required_course_num:
-        html = """
+    html = """
 
                         <table color="CCCC33" width="800" border="1" cellspacing="0" cellpadding="5" text-align="center">
 
                                 <tr>
 
-                                        <td text-align="center">课程名称</td>
+                                        <td>课程名称</td>
 
-                                        <td text-align="center">课程性质</td>
+                                        <td>课程性质</td>
 
-                                        <td text-align="center">学分</td>
+                                        <td>学分</td>
 
-                                        <td text-align="center">平时成绩</td>
+                                        <td>平时成绩</td>
 
-                                        <td text-align="center">期末成绩</td>
+                                        <td>期末成绩</td>
 
-                                        <td text-align="center">成绩</td>
+                                        <td>成绩</td>
 
                                 </tr>   
 
 
-                    """ + addtrs(scorenum) + """
+                    """ + addtrs(scorenum)
+
+    #   最后一次推送时计算GPA并与成绩表格一起推送
+    if scorenum == required_course_num:
+        html += addtrs(scorenum) + """
                         </table>
                         <br/>
                         <div class='gpa_text' style='font-size: 25px;font-style: italic;'>-->平均绩点：%s <--</div>
@@ -448,29 +450,6 @@ def htmlText(scorenum):
                         <br/>
                         <div class='end_words' style='font-size: 20px;'>本学期考试成绩查询完成！</div>
                     """
-    else:
-        html = """
-
-                        <table color="CCCC33" width="800" border="1" cellspacing="0" cellpadding="5" text-align="center">
-
-                                <tr>
-
-                                        <td text-align="center">课程名称</td>
-
-                                        <td text-align="center">课程性质</td>
-
-                                        <td text-align="center">学分</td>
-
-                                        <td text-align="center">平时成绩</td>
-
-                                        <td text-align="center">期末成绩</td>
-
-                                        <td text-align="center">成绩</td>
-
-                                </tr>   
-
-
-                    """ + addtrs(scorenum)
     return html
 
 
@@ -485,8 +464,6 @@ def addtrs(scorenum):
             trs = '''
                                     <tr>   
 
-                                            <td text-align="center">%s </td>
-
                                             <td>%s </td>
 
                                             <td>%s </td>
@@ -495,7 +472,9 @@ def addtrs(scorenum):
 
                                             <td>%s </td>
 
-                                            <td style="color:springgreen;">%s </td>
+                                            <td>%s </td>
+
+                                            <td style="color:springgreen;text-align: center;">%s </td>
 
                                     </tr>
                         ''' % (scorenp[i][0], scorenp[i][1], scorenp[i][2], scorenp[i][3], scorenp[i][4], scorenp[i][5])
@@ -505,7 +484,7 @@ def addtrs(scorenum):
             trs = '''
                                     <tr>   
 
-                                            <td text-align="center">%s </td>
+                                            <td>%s </td>
 
                                             <td>%s </td>
 
@@ -523,7 +502,7 @@ def addtrs(scorenum):
             trs = '''
                         <tr>   
 
-                                <td text-align="center">%s </td>
+                                <td>%s </td>
 
                                 <td>%s </td>
 
@@ -657,6 +636,8 @@ if __name__ == '__main__':
         loginCount = 0
         while not login():
             if loginCount > 3:
+                #   超过三次未登录自动更换网址
+                url_head = "202.199.155." + str(random.randint(33, 37))
                 final_url = 'http://' + url_head + \
                             check_for_redirects('http://' + url_head + '/default2.aspx')
                 final_url_head = final_url[0:48]
