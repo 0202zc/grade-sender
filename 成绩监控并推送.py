@@ -1,5 +1,5 @@
 '''
-大连大学成绩查询助手V1.7.181226
+大连大学成绩查询助手V1.7.190215
 Code Changed By ZC Liang
 2018.6.6
 Completed on 2019.2.15
