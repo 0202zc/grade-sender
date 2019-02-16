@@ -1,6 +1,5 @@
 # grade_sender
-大连大学成绩监控查询脚本
-A script of grades auto-sending based on Python3 by email.
+大连大学成绩监控查询脚本 / A script of grades auto-sending based on Python3 by email.
 
 ## 简介
 
