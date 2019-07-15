@@ -1,8 +1,8 @@
 '''
-大连大学成绩查询助手V1.7.190216
+大连大学成绩查询助手V1.7.190715
 Code By ZC Liang
 2018.6.6
-Completed on 2019.2.16
+Completed on 2019.7.15
 '''
 
 import getpass
@@ -49,6 +49,7 @@ makeup_course_num = 0  # 重修课程数目
 makeup_course_flag = -1  # 重修课程数目下标
 courseList = []  # 选课情况查询列表
 required_course_num = 0  # 本学期必修课总数
+chosen_course_num = 0   # 本学期选课总数
 
 # 准备Cookie和opener，因为cookie存于opener中，所以以下所有网页操作全部要基于同一个opener
 cookie = http.cookiejar.CookieJar()
@@ -77,11 +78,26 @@ def get_file_content(filePath):
         return fp.read()
 
 
-# 判断操作系统类型
-
-
-def getOpeningSystem():
-    return platform.system()
+def DBUtil():
+    conn = pymysql.connect(host="localhost", port=3307, user="root", passwd="adobe197341022", db="grade_query_system",
+                           charset="utf8")
+    cur = conn.cursor()
+    sql = "select * from student"
+    try:
+        cur.execute(sql)
+        # 获取所有记录列表
+        results = cur.fetchall()
+        for row in results:
+            sId = row[0]
+            sName = row[1]
+            sPwd = row[2]
+            sEmail = row[3]
+            # 打印结果
+            print("sId=%s,sName=%s,sPwd=%s,sEmail=%s" % (sId, sName, sPwd, sEmail))
+    except Exception as e:
+        print(e)
+    finally:
+        conn.close()
 
 
 # 判断操作系统类型
@@ -95,6 +111,13 @@ def getOpeningSystem():
 
 
 def isConnected():
+    # userOs = getOpeningSystem()
+    # if userOs == "Windows":
+    #     subprocess.check_call(
+    #         ["ping", "-n", "2", url_head], stdout=subprocess.PIPE)
+    # else:
+    #     subprocess.check_call(
+    #         ["ping", "-c", "2", url_head], stdout=subprocess.PIPE)
     try:
         response = requests.get('http://' + url_head, timeout=1)
         if response.status_code == 200:
@@ -122,9 +145,9 @@ def check_for_redirects(url):
 
 def image_util(img):
     new_im = img.convert("RGB")  # 将验证码图片转换成24位图片
-    new_im.save('' + DstDir + '\\ScoreHelper\\CheckCode1.jpg')  # 将24位图片保存到本地
+    new_im.save('./ScoreHelper/CheckCode1.jpg')  # 将24位图片保存到本地
 
-    arr = np.array(Image.open('' + DstDir + '\\ScoreHelper\\CheckCode1.jpg').convert("L"))
+    arr = np.array(Image.open('./ScoreHelper/CheckCode1.jpg').convert("L"))
 
     b = 255 - arr
     im = Image.fromarray(b.astype('uint8'))  # 翻转
@@ -133,19 +156,21 @@ def image_util(img):
     # im = Image.fromarray(d.astype('uint8'))  # 灰度
 
     #  此处验证过，翻转比灰度识别率更高
-    im.save('' + DstDir + '\\ScoreHelper\\CheckCode2.jpg')
+    im.save('./ScoreHelper/CheckCode2.jpg')
 
 
 #   验证码识别
 def code_recognition():
     try:
         #   调用百度云识别验证码
-        result = client.basicAccurate(get_file_content('' + DstDir + '\\ScoreHelper\\CheckCode2.jpg'))
+        result = client.basicAccurate(get_file_content('./ScoreHelper/CheckCode2.jpg'))
         word = result.get('words_result')
         res = ""
+        if word == "":
+            word = "0000"
         if len(word):
             res = re.findall('[a-zA-Z0-9]+', word[0].get('words'))[0]
-        elif len(res) > 4:  # 教务系统所有的验证码都是四位的，若大于四位，则挑选前四位
+        elif res != None and len(res) > 4:  # 教务系统所有的验证码都是四位的，若大于四位，则挑选前四位
             res = res[0:4]
         return res
     except Exception as e:
@@ -170,9 +195,9 @@ def login():
 
     #   获取验证码
     res = opener.open(final_url_head + '/checkcode.aspx').read()
-    with open('' + DstDir + '\\ScoreHelper\\CheckCode.jpg', 'wb') as file:
+    with open('./ScoreHelper/CheckCode.jpg', 'wb') as file:
         file.write(res)
-    img = Image.open('' + DstDir + '\\ScoreHelper\\CheckCode.jpg')
+    img = Image.open('./ScoreHelper/CheckCode.jpg')
 
     #   图片处理
     image_util(img)
@@ -278,6 +303,75 @@ def get_RequiredCourse_num():
 
 #   获取成绩
 
+#   该学期选课数目查询
+
+def get_ChosenCourse_num():
+    global chosen_course_num
+
+    print("正在查询本学期必修课数目...")
+    #   构造url
+    url = ''.join([
+        final_url_head + '/xsxkqk.aspx',
+        '?xh=',
+        sid,
+        '&xm=',
+        urllib.parse.quote(sname),
+        '&gnmkdm=N121615',
+    ])
+    #   构建查询学生选课情况表单
+    params = {
+        'ddlxn': ddlxn,
+        'ddlxq': ddlxq,
+    }
+
+    #   构造Request对象，填入Header，防止302跳转，获取新的View_State
+    req = urllib.request.Request(url)
+    req.add_header('Referer', final_url)
+    req.add_header('Origin', 'http://' + url_head + '/')
+    req.add_header(
+        'User-Agent',
+        'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36')
+    response = opener.open(req)
+    html = response.read().decode('gb2312')
+    viewstate = re.search(
+        '<input type="hidden" name="__VIEWSTATE" value="(.+?)"', html)
+    params['__VIEWSTATE'] = viewstate.group(1)
+
+    #   查询所有成绩
+    req = urllib.request.Request(
+        url, urllib.parse.urlencode(params).encode('gb2312'))
+    req.add_header('Referer', final_url)
+    req.add_header('Origin', 'http://' + url_head + '/')
+    response = opener.open(req)
+    soup = BeautifulSoup(response.read().decode('gb2312'), 'html.parser')
+    html = soup.find('table', class_='datelist')
+
+    #   指定要输出的列，原网页的表格列下标从0开始
+    #   用于标记是否是遍历第一行
+    flag = True
+    #   根据DOM解析所要数据，首位的each是NavigatableString对象，其余为Tag对象
+    #   遍历行
+    counter = 0
+    for each in html:
+        columnCounter = 0
+        column = []
+
+        if type(each) == bs4.element.NavigableString:
+            pass
+        else:
+            #   遍历列
+            for item in each.contents:
+                if item != '\n':
+                    if counter > 0 and columnCounter == 3:
+                        courseList.append(str(item.contents[0]).strip())
+                    columnCounter += 1
+            if flag:
+                flag = False
+            counter += 1
+
+    for each in courseList:
+        chosen_course_num += 1
+
 
 def getScore():
     global searchCount
@@ -309,7 +403,7 @@ def getScore():
     req.add_header('Origin', 'http://' + url_head + '/')
     req.add_header(
         'User-Agent',
-        'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36')
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.81 Safari/537.36')
     response = opener.open(req)
     html = response.read().decode('gb2312')
     viewstate = re.search(
@@ -377,6 +471,8 @@ def sendScore(table):
         try:
             scorenum = count
 
+            saveScoreNum()
+
             # 文本模式
             # context = i.get_string().replace("+"," ")
             # context = context.replace("-"," ")
@@ -407,13 +503,15 @@ def sendScore(table):
             server.sendmail(my_sender, [email_send_to, ], msg.as_string())
             server.quit()  # 关闭连接
             print("发送成功，请注意在此邮箱查收：" + email_send_to)
+
         except Exception as e:
             print(e)
             print("发送失败！")
     count = 0
     if scorenum != required_course_num:
         print("程序休息中...（按'Ctrl C'结束）")
-        time.sleep(1200)  # 二十分钟查一次
+        # time.sleep(1200)  # 二十分钟查一次
+        time.sleep(300)  # 5分钟查一次
     return scorenum
 
 
@@ -537,7 +635,7 @@ def getGPA():
         else:
             #   有些成绩是等级，需要转换为数字
             if scorenp[i][5].isalpha() and scorenp[i][5] != "F":
-                sc.append(745 - 10 * ord(scorenp[i][5]))  # 计算式子：x - (x - A) + 10 * (D - x) 即 745 - 10 * x
+                sc.append(745 - 10 * ord(scorenp[i][5]))  # 算式：x - (x - A) + 10 * (D - x) 即 745 - 10 * x
             elif scorenp[i][5] == "F":
                 sc.append(0)
             else:
@@ -598,15 +696,45 @@ def setSemester():
         print(e)
 
 
+#   保存上次查询的成绩数目
+def saveScoreNum():
+    global scorenum
+    try:
+        with open(r'./\ScoreHelper/scoreinfo.bin', 'w') as file_object:
+            file_object.write(str(scorenum))
+            file_object.close()
+    except Exception as e:
+        print(e)
+
+
+#   获取保存的上次查询的成绩数目
+def getScoreNum():
+    global scorenum
+    try:
+        if os.path.isfile(r"./ScoreHelper/scoreinfo.bin"):
+            openFile = open('./ScoreHelper/scoreinfo.bin', 'r')
+            num = openFile.readline()
+            openFile.close()
+            scorenum = int(num)
+            return num
+        else:
+            with open(r'./ScoreHelper/scoreinfo.bin', 'w') as file_object:
+                file_object.write("0")
+                file_object.close()
+                scorenum = 0
+    except Exception as e:
+        print(e)
+
+
 if __name__ == '__main__':
     setSemester()
-
+    getScoreNum()
     try:
         searchCount = 1
         print('欢迎使用大连大学成绩查询助手！')
         print('正在检查网络...')
         if isConnected():
-            with open(r'' + DstDir + '\\ScoreHelper\\uinfo.bin', 'rb') as file:
+            with open(r'./ScoreHelper/uinfo.bin', 'rb') as file:
                 udick = pickle.load(file)
                 sname = udick['sname']
                 sid = udick['sid']
@@ -632,7 +760,7 @@ if __name__ == '__main__':
                 time.sleep(3)
                 continue
 
-            get_RequiredCourse_num()
+            get_ChosenCourse_num()
             getScore()
             counter = 0
             while scorenum <= required_course_num:
@@ -645,7 +773,7 @@ if __name__ == '__main__':
     except FileNotFoundError:
         # if os.path.exists(r'' + DstDir + '\\ScoreHelper'):
         #     os.remove(r'' + DstDir + '\\ScoreHelper')
-        os.mkdir(r'' + DstDir + '\\ScoreHelper')  # 注：针对Windows目录结构
+        os.mkdir(r'./ScoreHelper/ScoreHelper')  # 注：针对Windows目录结构
         print('这是你第一次使用，请按提示输入信息，以后可不必再次输入~')
         sid = input('请输入学号：')
         sname = input('请输入姓名：')
@@ -655,7 +783,7 @@ if __name__ == '__main__':
         email_send_to = input('请输入要将成绩发送到的邮箱地址：')
         udick = {'sname': sname, 'sid': sid,
                  'spwd': spwd, 'email_send_to': email_send_to}
-        file = open(r'' + DstDir + '\\ScoreHelper\\uinfo.bin', 'wb')
+        file = open(r'./ScoreHelper/uinfo.bin', 'wb')
         pickle.dump(udick, file)
         file.close()
         final_url = 'http://' + url_head + \
@@ -671,13 +799,13 @@ if __name__ == '__main__':
             email_send_to = input('请输入要将成绩发送到的邮箱地址：')
             udick = {'sname': sname, 'sid': sid,
                      'spwd': spwd, 'email_send_to': email_send_to}
-            file = open(r'' + DstDir + '\\ScoreHelper\\uinfo.bin', 'wb')
+            file = open(r'./ScoreHelper/uinfo.bin', 'wb')
             pickle.dump(udick, file)
             file.close()
             final_url = 'http://' + url_head + \
                         check_for_redirects('http://' + url_head + '/default2.aspx')
             final_url_head = final_url[0:48]
-        get_RequiredCourse_num()
+        get_ChosenCourse_num()
         getScore()
         counter = 0
         while scorenum <= required_course_num:
