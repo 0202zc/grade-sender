@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="93a84c11-f62f-4a10-bc9a-96e590ac9906" name="Default Changelist" comment="更新lib">
+    <list default="true" id="93a84c11-f62f-4a10-bc9a-96e590ac9906" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,7 +31,19 @@
       <find>get_RequiredCourse_num</find>
       <find>courseList</find>
       <find>requiredCo</find>
+      <find>code_recognition</find>
+      <find>1 / 0</find>
+      <find>reque</find>
+      <find>login</find>
+      <find>登陆</find>
+      <find>chosen_course_num</find>
+      <find>scorenp[i][0] !=</find>
+      <find>chosen_course_num - 1</find>
+      <find>chosen</find>
     </findStrings>
+    <replaceStrings>
+      <replace>登录</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -47,11 +59,15 @@
         <option value="$PROJECT_DIR$/../../Present.py" />
         <option value="$USER_HOME$/Desktop/test.py" />
         <option value="$USER_HOME$/Desktop/file_operator.py" />
-        <option value="$PROJECT_DIR$/成绩监控并推送.py" />
         <option value="$USER_HOME$/Desktop/新建文件夹/成绩监控并推送.py" />
-        <option value="$USER_HOME$/Desktop/成绩监控并推送 (临时修改).py" />
         <option value="$USER_HOME$/Desktop/成绩监控并推送 - 副本.py" />
+        <option value="$PROJECT_DIR$/成绩监控并推送.py" />
+        <option value="$USER_HOME$/Desktop/成绩监控并推送 (临时修改) - 副本.py" />
         <option value="$USER_HOME$/Desktop/成绩监控并推送.py" />
+        <option value="$USER_HOME$/Desktop/成绩监控并推送 (临时修改低精度) .py" />
+        <option value="$USER_HOME$/Desktop/成绩监控并推送 (临时修改).py" />
+        <option value="$USER_HOME$/Desktop/CET_GET.py" />
+        <option value="$PROJECT_DIR$/../../QQMail/QQMail发送.py" />
       </list>
     </option>
   </component>
@@ -65,7 +81,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -77,11 +92,12 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="fileTemplates" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/rgzndl-master" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -101,7 +117,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.成绩监控并推送 - 副本">
+  <component name="RunManager" selected="Python.QQMail发送">
     <configuration name="成绩监控并推送 - 副本" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -123,6 +139,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="成绩监控并推送 (临时修改)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/成绩监控并推送 (临时修改).py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="成绩监控并推送" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -136,6 +173,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/成绩监控并推送.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="QQMail发送" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../QQMail" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../QQMail/QQMail发送.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -241,6 +299,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/成绩监控并推送.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="search_CET" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/search_CET.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -251,6 +330,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.QQMail发送" />
+        <item itemvalue="Python.search_CET" />
+        <item itemvalue="Python.成绩监控并推送 (临时修改)" />
         <item itemvalue="Python.成绩监控并推送 - 副本" />
         <item itemvalue="Python.成绩监控并推送" />
       </list>
@@ -267,6 +349,14 @@
       <option name="presentableId" value="Default" />
       <updated>1550281793933</updated>
     </task>
+    <task id="LOCAL-00001" summary="修复查询本学期选课总数bug">
+      <created>1563200512313</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1563200512313</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -281,7 +371,7 @@
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="846" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17173052" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17173052" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -292,7 +382,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32913166" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32913166" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32913166" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.32913166" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -302,7 +392,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="更新lib" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新lib" />
+    <MESSAGE value="修复查询本学期选课总数bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复查询本学期选课总数bug" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
@@ -366,13 +457,7 @@
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Desktop/file_operator.py" />
-    <entry file="file://$USER_HOME$/Desktop/新建文件夹/成绩监控并推送.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="554">
-          <caret line="726" column="4" selection-start-line="726" selection-start-column="4" selection-end-line="726" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Desktop/新建文件夹/成绩监控并推送.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/-1340631236/time.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="229">
@@ -380,41 +465,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Desktop/成绩监控并推送 (临时修改).py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-726">
-          <caret line="557" column="17" lean-forward="true" selection-start-line="557" selection-start-column="17" selection-end-line="557" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Desktop/成绩监控并推送 - 副本.py" />
     <entry file="file://$PROJECT_DIR$/../../Project/Lib/site-packages/aip/ocr.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="73" column="21" lean-forward="true" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
+        <state relative-caret-position="133">
+          <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/成绩监控并推送.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12100">
-          <caret line="577" lean-forward="true" selection-start-line="577" selection-end-line="577" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Desktop/成绩监控并推送 (临时修改) - 副本.py" />
     <entry file="file://$USER_HOME$/Desktop/成绩监控并推送.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="234" column="31" lean-forward="true" selection-start-line="234" selection-start-column="31" selection-end-line="234" selection-end-column="31" />
+        <state relative-caret-position="286">
+          <caret line="687" column="17" lean-forward="true" selection-start-line="687" selection-start-column="17" selection-end-line="687" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/成绩监控并推送 (临时修改).py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="556" column="32" lean-forward="true" selection-start-line="556" selection-start-column="32" selection-end-line="556" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/成绩监控并推送 (临时修改低精度) .py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="758" column="28" lean-forward="true" selection-start-line="758" selection-start-column="28" selection-end-line="758" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/消息发送.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../大连大学体育智慧云/跑操爬虫.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="8" column="34" lean-forward="true" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/CET_GET.py" />
+    <entry file="file://$PROJECT_DIR$/成绩监控并推送.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-13">
+          <caret line="485" column="18" lean-forward="true" selection-start-line="485" selection-start-column="18" selection-end-line="485" selection-end-column="18" />
           <folding>
-            <element signature="e#7690#9667#0" />
+            <element signature="e#80#94#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Desktop/成绩监控并推送 - 副本.py">
+    <entry file="file://$PROJECT_DIR$/../../QQMail/QQMail发送.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="298" column="29" lean-forward="true" selection-start-line="298" selection-start-column="29" selection-end-line="298" selection-end-column="29" />
+        <state relative-caret-position="22">
+          <caret line="15" column="43" lean-forward="true" selection-start-line="15" selection-start-column="43" selection-end-line="15" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/search_CET.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
         </state>
       </provider>
     </entry>
